@@ -90,6 +90,12 @@ for epoch in range(1, n_epochs + 1):
     train(epoch)
     test()
 
+# 初始化新的网络和优化器
 new_network = Net()
 new_optimizer = optim.SGD(new_network.parameters(), lr=learning_rate, momentum=momentum)
 
+# 新的变量挂载网络和优化器当前的内部状态
+network_state_dict = torch.load('./model.pth')
+optimizer_state_dict = torch.load('./optimizer.pth')
+new_network.load_state_dict(network_state_dict)
+new_optimizer.load_state_dict(optimizer_state_dict)
