@@ -63,6 +63,7 @@ def test():
     network.eval()
     test_loss = 0
     correct = 0
+    # 评估模型不需要进行模型参数的更新，于是禁用梯度计算，不会计算反向传播的梯度
     with torch.no_grad():
         for data, target in test_loader:
             # 网络输出
@@ -82,3 +83,9 @@ def test():
 
 # 开始正确训练之前，检测测试集的准确率（应该为10%上下）
 test()
+
+
+# 正式模型训练
+for epoch in range(1, n_epochs + 1):
+    train(epoch)
+    test()
