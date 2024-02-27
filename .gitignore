@@ -6,3 +6,8 @@ data/MNIST/raw/train-images-idx3-ubyte
 data/MNIST/raw/train-labels-idx1-ubyte
 *.pth
 *.pyc
+*.log
+*.yaml
+*.txt
+*.json
+*.swanlab
