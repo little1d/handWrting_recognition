@@ -36,4 +36,4 @@ class Net(nn.Module):
         # 计算第二个全连接层的输出
         x = self.fc2(x)
         # 计算输出的对数概率，用于后续的分类任务
-        return F.log_softmax(x)
+        return F.log_softmax(x, dim=1)

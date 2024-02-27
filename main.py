@@ -55,7 +55,7 @@ def train(epoch):
 
 
 # 训练一个epoch
-train(1)
+# train(1)
 
 
 def test():
@@ -65,9 +65,13 @@ def test():
     correct = 0
     with torch.no_grad():
         for data, target in test_loader:
+            # 网络输出
             output = network(data)
-            test_loss += F.nll_loss(output, target, size_average=False).item()
+            # 网络损失 item()将损失值从tensor变为python数值
+            test_loss += F.nll_loss(output, target, reduction='sum').item()
+            # 从网络输出中找到概率最高的类别索引，即预测结果 [1]表示获取最大值的索引 pred是一个tensor
             pred = output.data.max(1, keepdim=True)[1]
+            # view_as()保证维度相同，再判断pred与target是否一直，每一批次累加到correct中
             correct += pred.eq(target.data.view_as(pred)).sum()
     test_loss /= len(test_loader.dataset)
     test_losses.append(test_loss)
