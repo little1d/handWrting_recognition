@@ -99,3 +99,8 @@ network_state_dict = torch.load('./model.pth')
 optimizer_state_dict = torch.load('./optimizer.pth')
 new_network.load_state_dict(network_state_dict)
 new_optimizer.load_state_dict(optimizer_state_dict)
+
+for i in range(4, 9):
+    test_counter.append(i*len(train_loader.dataset))
+    train(i)
+    test()
