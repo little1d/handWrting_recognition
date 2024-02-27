@@ -89,3 +89,7 @@ test()
 for epoch in range(1, n_epochs + 1):
     train(epoch)
     test()
+
+new_network = Net()
+new_optimizer = optim.SGD(new_network.parameters(), lr=learning_rate, momentum=momentum)
+
