@@ -1,0 +1,12 @@
+dataset:
+  desc: null
+  sort: 1
+  value: MNIST
+learning_rate:
+  desc: null
+  sort: 2
+  value: 0.01
+model:
+  desc: null
+  sort: 0
+  value: cnn

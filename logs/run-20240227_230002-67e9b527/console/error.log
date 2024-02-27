@@ -1,0 +1,7 @@
+2024-02-27 23:00:03.926313
+<class 'AttributeError'>
+AttributeError("module 'swanlab' has no attribute 'watch'")
+  File "D:\code\python\handWrting_recognition\main.py", line 43, in <module>
+    swanlab.watch
+
+

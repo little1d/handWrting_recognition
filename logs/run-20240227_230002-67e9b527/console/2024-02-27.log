@@ -1,0 +1,5 @@
+1 [SwanLab-INFO]:        Experiment handwriting_recognition_Feb27_23-00-02 has been registered.
+2 [SwanLab-INFO]:        Run data will be saved locally in D:\code\python\handWrting_recognition\logs\run-20240227_230002-67e9b527
+3 [SwanLab-INFO]:        Experiment_name: handwriting_recognition_Feb27_23-00-02
+4 [SwanLab-INFO]:        Run `swanlab watch` to view SwanLab Experiment Dashboard
+5 [SwanLab-ERROR]:       Error happended while training, SwanLab will throw it

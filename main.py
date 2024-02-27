@@ -1,3 +1,4 @@
+import swanlab
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
@@ -27,6 +28,18 @@ train_counter = []
 test_losses = []
 test_counter = [i * len(train_loader.dataset) for i in range(n_epochs + 1)]
 
+# 初始化swanlab 因为在train和test函数中进行了测试与参数记录，所以初始化得提前
+swanlab.init(
+    experiment_name="handwriting_recognition",
+    description="handwriting recognition with datasets MNIST.",
+    config={
+        "model": "cnn",
+        "dataset": "MNIST",
+        "learning_rate": learning_rate,
+    },
+    logdir="./logs"
+)
+
 
 def train(epoch):
     # 继承自nn.Module，将模型设置为训练模式
@@ -47,6 +60,7 @@ def train(epoch):
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                        100. * batch_idx / len(train_loader), loss.item()))
+            swanlab.log({"train_loss": loss.item()})
             train_losses.append(loss.item())
             train_counter.append(
                 (batch_idx * 64) + ((epoch - 1) * len(train_loader.dataset)))
@@ -70,10 +84,12 @@ def test():
             output = network(data)
             # 网络损失 item()将损失值从tensor变为python数值
             test_loss += F.nll_loss(output, target, reduction='sum').item()
+            swanlab.log({"test_loss": test_loss / len(test_loader.dataset)})
             # 从网络输出中找到概率最高的类别索引，即预测结果 [1]表示获取最大值的索引 pred是一个tensor
             pred = output.data.max(1, keepdim=True)[1]
             # view_as()保证维度相同，再判断pred与target是否一直，每一批次累加到correct中
             correct += pred.eq(target.data.view_as(pred)).sum()
+            swanlab.log({"test_acc": 100. * correct / len(test_loader.dataset)})
     test_loss /= len(test_loader.dataset)
     test_losses.append(test_loss)
     print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
@@ -81,8 +97,8 @@ def test():
         100. * correct / len(test_loader.dataset)))
 
 
-# 开始正确训练之前，检测测试集的准确率（应该为10%上下）
-test()
+# 开始正确训练之前，可以检测测试集的准确率（应该为10%上下）
+# test()
 
 
 # 正式模型训练
@@ -101,6 +117,6 @@ new_network.load_state_dict(network_state_dict)
 new_optimizer.load_state_dict(optimizer_state_dict)
 
 for i in range(4, 9):
-    test_counter.append(i*len(train_loader.dataset))
+    test_counter.append(i * len(train_loader.dataset))
     train(i)
     test()
