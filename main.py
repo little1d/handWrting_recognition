@@ -16,8 +16,11 @@ log_interval = 10
 random_seed = 1
 torch.manual_seed(random_seed)
 
+# device setting
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 # 初始化网络和优化器
-network = Net()
+network = Net().to(device)
 optimizer = optim.SGD(network.parameters(), lr=learning_rate,
                       momentum=momentum)
 
@@ -45,6 +48,7 @@ def train(epoch):
     # 继承自nn.Module，将模型设置为训练模式
     network.train()
     for batch_idx, (data, target) in enumerate(train_loader):
+        data, target = data.to(device), target.to(device)  # 移动到GPU
         # 清除旧的梯度
         optimizer.zero_grad()
         # 计算当前批次输出
@@ -80,6 +84,7 @@ def test():
     # 评估模型不需要进行模型参数的更新，于是禁用梯度计算，不会计算反向传播的梯度
     with torch.no_grad():
         for data, target in test_loader:
+            data, target = data.to(device), target.to(device)  # 移动到GPU
             # 网络输出
             output = network(data)
             # 网络损失 item()将损失值从tensor变为python数值
